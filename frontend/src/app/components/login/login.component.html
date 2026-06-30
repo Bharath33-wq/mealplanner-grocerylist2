@@ -1,0 +1,187 @@
+<div class="login-page">
+  <!-- Loading Overlay -->
+  @if (isLoading) {
+    <div class="loading-overlay">
+      <div class="loading-content">
+        <div class="spinner-grow text-success" role="status"></div>
+        <div class="spinner-grow text-success spinner-delay-1" role="status"></div>
+        <div class="spinner-grow text-success spinner-delay-2" role="status"></div>
+        <p class="loading-text mt-3">{{ loadingMessage }}</p>
+      </div>
+    </div>
+  }
+
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <div class="logo-icon">
+          <i class="bi bi-egg-fried"></i>
+        </div>
+        <h1>Meal Planner</h1>
+        <p class="subtitle">& Grocery List</p>
+      </div>
+
+      <!-- Login Form -->
+      @if (!isRegisterMode && !showForgotPassword) {
+        <form (ngSubmit)="onLogin()" class="login-form">
+          <div class="input-group-custom">
+            <i class="bi bi-person-fill input-icon"></i>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Username"
+              [(ngModel)]="username"
+              name="username"
+              required
+              autocomplete="username"
+            />
+          </div>
+
+          <div class="input-group-custom">
+            <i class="bi bi-lock-fill input-icon"></i>
+            <input
+              type="password"
+              class="form-control"
+              placeholder="Password"
+              [(ngModel)]="password"
+              name="password"
+              required
+              autocomplete="current-password"
+            />
+          </div>
+
+          <div class="forgot-password-link">
+            <a (click)="openForgotPassword()">Forgot Password?</a>
+          </div>
+
+          @if (errorMessage) {
+            <div class="alert alert-danger py-2 text-center">
+              <i class="bi bi-exclamation-circle me-2"></i>{{ errorMessage }}
+            </div>
+          }
+
+          <button type="submit" class="btn btn-success w-100 login-btn" [disabled]="isLoading || !username || !password">
+            <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+          </button>
+        </form>
+
+        <div class="login-footer">
+          <p class="toggle-text">Don't have an account?
+            <a class="toggle-link" (click)="toggleMode()">Register here</a>
+          </p>
+        </div>
+      }
+
+      <!-- Forgot Password Form -->
+      @if (showForgotPassword) {
+        <form (ngSubmit)="onResetPassword()" class="login-form">
+          <h6 class="form-title"><i class="bi bi-key me-2"></i>Reset Password</h6>
+
+          <div class="input-group-custom">
+            <i class="bi bi-person-fill input-icon"></i>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter your username"
+              [(ngModel)]="forgotUsername"
+              name="forgotUsername"
+              required
+            />
+          </div>
+
+          <div class="input-group-custom">
+            <i class="bi bi-lock-fill input-icon"></i>
+            <input
+              type="password"
+              class="form-control"
+              placeholder="New Password"
+              [(ngModel)]="newPassword"
+              name="newPassword"
+              required
+            />
+          </div>
+
+          <div class="input-group-custom">
+            <i class="bi bi-lock-fill input-icon"></i>
+            <input
+              type="password"
+              class="form-control"
+              placeholder="Confirm New Password"
+              [(ngModel)]="confirmPassword"
+              name="confirmPassword"
+              required
+            />
+          </div>
+
+          @if (errorMessage) {
+            <div class="alert alert-danger py-2 text-center">
+              <i class="bi bi-exclamation-circle me-2"></i>{{ errorMessage }}
+            </div>
+          }
+
+          @if (successMessage) {
+            <div class="alert alert-success py-2 text-center">
+              <i class="bi bi-check-circle me-2"></i>{{ successMessage }}
+            </div>
+          }
+
+          <button type="submit" class="btn btn-success w-100 login-btn" [disabled]="isLoading || !forgotUsername || !newPassword || !confirmPassword">
+            <i class="bi bi-check-lg me-2"></i>Reset Password
+          </button>
+        </form>
+
+        <div class="login-footer">
+          <p class="toggle-text">
+            <a class="toggle-link" (click)="closeForgotPassword()"><i class="bi bi-arrow-left me-1"></i>Back to Sign In</a>
+          </p>
+        </div>
+      }
+
+      <!-- Register Form -->
+      @if (isRegisterMode) {
+        <form (ngSubmit)="onRegister()" class="login-form">
+          <div class="input-group-custom">
+            <i class="bi bi-person-badge input-icon"></i>
+            <input type="text" class="form-control" placeholder="Full Name" [(ngModel)]="regFullName" name="regFullName" required />
+          </div>
+          <div class="input-group-custom">
+            <i class="bi bi-envelope-fill input-icon"></i>
+            <input type="email" class="form-control" placeholder="Email" [(ngModel)]="regEmail" name="regEmail" required />
+          </div>
+          <div class="input-group-custom">
+            <i class="bi bi-person-fill input-icon"></i>
+            <input type="text" class="form-control" placeholder="Username" [(ngModel)]="regUsername" name="regUsername" required />
+          </div>
+          <div class="input-group-custom">
+            <i class="bi bi-lock-fill input-icon"></i>
+            <input type="password" class="form-control" placeholder="Password" [(ngModel)]="regPassword" name="regPassword" required />
+          </div>
+
+          @if (errorMessage) {
+            <div class="alert alert-danger py-2 text-center">
+              <i class="bi bi-exclamation-circle me-2"></i>{{ errorMessage }}
+            </div>
+          }
+          @if (successMessage) {
+            <div class="alert alert-success py-2 text-center">
+              <i class="bi bi-check-circle me-2"></i>{{ successMessage }}
+            </div>
+          }
+
+          <button type="submit" class="btn btn-success w-100 login-btn" [disabled]="isLoading || !regUsername || !regPassword || !regFullName || !regEmail">
+            <i class="bi bi-person-plus me-2"></i>Register
+          </button>
+        </form>
+
+        <div class="login-footer">
+          <p class="toggle-text">Already have an account?
+            <a class="toggle-link" (click)="toggleMode()">Sign in here</a>
+          </p>
+        </div>
+      }
+    </div>
+  </div>
+  <footer class="login-dev-footer">
+    <p>Developed by <span class="developer-name">Bharath Thirumalai</span></p>
+  </footer>
+</div>

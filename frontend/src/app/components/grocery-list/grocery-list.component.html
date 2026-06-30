@@ -1,0 +1,94 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h2><i class="bi bi-cart-check me-2 text-success"></i>Grocery Checklist</h2>
+      <p class="text-muted">{{ purchasedCount }} of {{ totalCount }} items purchased</p>
+    </div>
+    <button class="btn btn-success" (click)="openAdd()">
+      <i class="bi bi-plus-lg me-2"></i>Add Item
+    </button>
+  </div>
+
+  <!-- Progress Bar -->
+  @if (totalCount > 0) {
+    <div class="progress mb-4" style="height: 10px;">
+      <div class="progress-bar" [style.width.%]="(purchasedCount / totalCount) * 100"></div>
+    </div>
+  }
+
+  <div class="grocery-grid">
+    @for (item of groceryItems; track item.id) {
+      <div class="grocery-card" [class.purchased]="item.purchased">
+        <div class="grocery-check">
+          <input type="checkbox" class="form-check-input" [checked]="item.purchased" (change)="togglePurchased(item)">
+        </div>
+        <div class="grocery-info">
+          <div class="grocery-name" [class.text-decoration-line-through]="item.purchased">{{ item.itemName }}</div>
+          <div class="grocery-meta">
+            <span class="badge bg-success"><i class="bi {{ getCategoryIcon(item.category) }} me-1"></i>{{ item.category }}</span>
+            <span class="quantity"><i class="bi bi-box me-1"></i>{{ item.quantity }}</span>
+          </div>
+        </div>
+        <div class="grocery-actions">
+          <button class="btn btn-sm btn-outline-success" (click)="openEdit(item)">
+            <i class="bi bi-pencil"></i>
+          </button>
+          <button class="btn btn-sm btn-outline-danger" (click)="delete(item.id!)">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (groceryItems.length === 0) {
+    <div class="empty-state">
+      <i class="bi bi-cart-x"></i>
+      <h4>Your grocery list is empty</h4>
+      <p>Add items to your grocery checklist!</p>
+    </div>
+  }
+</div>
+
+<!-- Modal -->
+@if (showModal) {
+  <div class="modal-backdrop show" (click)="showModal = false"></div>
+  <div class="modal show d-block" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-cart-plus me-2 text-success"></i>
+            {{ isEditing ? 'Edit' : 'Add' }} Grocery Item
+          </h5>
+          <button type="button" class="btn-close" (click)="showModal = false"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Item Name</label>
+            <input type="text" class="form-control" [(ngModel)]="currentItem.itemName" placeholder="e.g., Chicken Breast">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Category</label>
+            <select class="form-select" [(ngModel)]="currentItem.category">
+              <option value="">Select category</option>
+              @for (cat of categories; track cat) {
+                <option [value]="cat">{{ cat }}</option>
+              }
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Quantity</label>
+            <input type="text" class="form-control" [(ngModel)]="currentItem.quantity" placeholder="e.g., 1 kg">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline-secondary" (click)="showModal = false">Cancel</button>
+          <button class="btn btn-success" (click)="save()" [disabled]="!currentItem.itemName">
+            <i class="bi bi-check-lg me-1"></i>{{ isEditing ? 'Update' : 'Add' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

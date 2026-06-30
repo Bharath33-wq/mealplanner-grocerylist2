@@ -1,0 +1,95 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h2><i class="bi bi-bell me-2 text-success"></i>Reminder Notifications</h2>
+      <p class="text-muted">{{ activeCount }} active reminders</p>
+    </div>
+    <button class="btn btn-success" (click)="openAdd()">
+      <i class="bi bi-plus-lg me-2"></i>Add Reminder
+    </button>
+  </div>
+
+  <div class="reminders-grid">
+    @for (reminder of reminders; track reminder.id) {
+      <div class="reminder-card" [class.inactive]="!reminder.active">
+        <div class="reminder-icon" [style.background]="getTypeColor(reminder.type)">
+          <i class="bi {{ getTypeIcon(reminder.type) }}"></i>
+        </div>
+        <div class="reminder-content">
+          <div class="reminder-title">{{ reminder.title }}</div>
+          <div class="reminder-desc">{{ reminder.description }}</div>
+          <div class="reminder-meta">
+            <span class="reminder-time"><i class="bi bi-clock me-1"></i>{{ formatDate(reminder.reminderTime) }}</span>
+            <span class="badge" [style.background]="getTypeColor(reminder.type)">{{ reminder.type }}</span>
+          </div>
+        </div>
+        <div class="reminder-actions">
+          <div class="form-check form-switch mb-2">
+            <input class="form-check-input" type="checkbox" [checked]="reminder.active" (change)="toggleActive(reminder)">
+          </div>
+          <button class="btn btn-sm btn-outline-success" (click)="openEdit(reminder)">
+            <i class="bi bi-pencil"></i>
+          </button>
+          <button class="btn btn-sm btn-outline-danger" (click)="delete(reminder.id!)">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (reminders.length === 0) {
+    <div class="empty-state">
+      <i class="bi bi-bell-slash"></i>
+      <h4>No reminders set</h4>
+      <p>Create reminders for grocery shopping, meal prep, and more!</p>
+    </div>
+  }
+</div>
+
+<!-- Modal -->
+@if (showModal) {
+  <div class="modal-backdrop show" (click)="showModal = false"></div>
+  <div class="modal show d-block" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-bell-fill me-2 text-success"></i>
+            {{ isEditing ? 'Edit' : 'Add' }} Reminder
+          </h5>
+          <button type="button" class="btn-close" (click)="showModal = false"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input type="text" class="form-control" [(ngModel)]="currentReminder.title" placeholder="e.g., Grocery Shopping">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" rows="2" [(ngModel)]="currentReminder.description" placeholder="What do you need to remember?"></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Reminder Date & Time</label>
+            <input type="datetime-local" class="form-control" [(ngModel)]="currentReminder.reminderTime">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Type</label>
+            <select class="form-select" [(ngModel)]="currentReminder.type">
+              <option value="">Select type</option>
+              @for (type of types; track type) {
+                <option [value]="type">{{ type }}</option>
+              }
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline-secondary" (click)="showModal = false">Cancel</button>
+          <button class="btn btn-success" (click)="save()" [disabled]="!currentReminder.title">
+            <i class="bi bi-check-lg me-1"></i>{{ isEditing ? 'Update' : 'Save' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

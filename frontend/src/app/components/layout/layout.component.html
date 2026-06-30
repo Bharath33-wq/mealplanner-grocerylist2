@@ -1,0 +1,49 @@
+<div class="app-container" [class.sidebar-collapsed]="sidebarCollapsed">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo" [class.d-none]="sidebarCollapsed">
+        <i class="bi bi-egg-fried logo-icon"></i>
+        <div>
+          <h5 class="mb-0">Meal Planner</h5>
+          <small class="text-green">& Grocery List</small>
+        </div>
+      </div>
+      <button class="toggle-btn" (click)="toggleSidebar()">
+        <i class="bi" [ngClass]="sidebarCollapsed ? 'bi-chevron-right' : 'bi-chevron-left'"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      @for (item of menuItems; track item.path) {
+        <a [routerLink]="item.path" routerLinkActive="active" class="nav-item">
+          <i class="bi {{ item.icon }}"></i>
+          <span class="nav-label" [class.d-none]="sidebarCollapsed">{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-info" [class.justify-content-center]="sidebarCollapsed">
+        <div class="user-avatar">
+          <i class="bi bi-person-circle"></i>
+        </div>
+        <div class="user-details" [class.d-none]="sidebarCollapsed">
+          <span class="user-name">{{ authService.getFullName() }}</span>
+        </div>
+      </div>
+      <button class="logout-btn" (click)="logout()">
+        <i class="bi bi-box-arrow-left"></i>
+        <span [class.d-none]="sidebarCollapsed">Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <router-outlet></router-outlet>
+    <footer class="app-footer">
+      <p>Developed by <span class="developer-name">Bharath Thirumalai</span></p>
+    </footer>
+  </main>
+</div>

@@ -1,0 +1,110 @@
+.page-container {
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.page-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.grocery-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.grocery-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 16px 20px;
+  background: var(--surface);
+  border: 1px solid rgba(76, 175, 80, 0.15);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.grocery-card:hover {
+  border-color: rgba(76, 175, 80, 0.4);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.grocery-card.purchased {
+  opacity: 0.6;
+  background: rgba(76, 175, 80, 0.05);
+}
+
+.grocery-check .form-check-input {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+}
+
+.grocery-info {
+  flex: 1;
+}
+
+.grocery-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: #e0e0e0;
+  margin-bottom: 4px;
+}
+
+.grocery-meta {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.quantity {
+  font-size: 12px;
+  color: #888;
+}
+
+.grocery-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-outline-danger {
+  color: #ff6b6b;
+  border-color: #ff6b6b;
+}
+
+.btn-outline-danger:hover {
+  background: #ff6b6b;
+  color: #fff;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+}
+
+.empty-state i {
+  font-size: 60px;
+  color: #4caf50;
+  opacity: 0.5;
+  display: block;
+  margin-bottom: 15px;
+}
+
+.modal-backdrop {
+  background: rgba(0, 0, 0, 0.7);
+}

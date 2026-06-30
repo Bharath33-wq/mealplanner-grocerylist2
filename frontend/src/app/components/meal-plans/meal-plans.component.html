@@ -1,0 +1,108 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h2><i class="bi bi-calendar-week me-2 text-success"></i>Weekly Meal Plans</h2>
+      <p class="text-muted">Plan your meals for every day of the week</p>
+    </div>
+    <button class="btn btn-success" (click)="openAdd()">
+      <i class="bi bi-plus-lg me-2"></i>Add Meal Plan
+    </button>
+  </div>
+
+  <div class="row g-3">
+    @for (plan of mealPlans; track plan.id) {
+      <div class="col-md-6 col-lg-4">
+        <div class="card meal-card h-100">
+          <div class="card-header-custom">
+            <h5><i class="bi bi-calendar-day me-2"></i>{{ plan.dayOfWeek }}</h5>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-outline-success" (click)="openEdit(plan)">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="delete(plan.id!)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="meal-item">
+              <div class="meal-label"><i class="bi bi-sunrise me-2"></i>Breakfast</div>
+              <div class="meal-value">{{ plan.breakfast }}</div>
+            </div>
+            <div class="meal-item">
+              <div class="meal-label"><i class="bi bi-sun me-2"></i>Lunch</div>
+              <div class="meal-value">{{ plan.lunch }}</div>
+            </div>
+            <div class="meal-item">
+              <div class="meal-label"><i class="bi bi-moon-stars me-2"></i>Dinner</div>
+              <div class="meal-value">{{ plan.dinner }}</div>
+            </div>
+            <div class="meal-item">
+              <div class="meal-label"><i class="bi bi-cookie me-2"></i>Snacks</div>
+              <div class="meal-value">{{ plan.snacks }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (mealPlans.length === 0) {
+    <div class="empty-state">
+      <i class="bi bi-calendar-x"></i>
+      <h4>No meal plans yet</h4>
+      <p>Start planning your weekly meals!</p>
+    </div>
+  }
+</div>
+
+<!-- Modal -->
+@if (showModal) {
+  <div class="modal-backdrop show" (click)="showModal = false"></div>
+  <div class="modal show d-block" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-calendar-plus me-2 text-success"></i>
+            {{ isEditing ? 'Edit' : 'Add' }} Meal Plan
+          </h5>
+          <button type="button" class="btn-close" (click)="showModal = false"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Day of Week</label>
+            <select class="form-select" [(ngModel)]="currentPlan.dayOfWeek">
+              <option value="">Select a day</option>
+              @for (day of days; track day) {
+                <option [value]="day">{{ day }}</option>
+              }
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label"><i class="bi bi-sunrise me-1"></i>Breakfast</label>
+            <input type="text" class="form-control" [(ngModel)]="currentPlan.breakfast" placeholder="What's for breakfast?">
+          </div>
+          <div class="mb-3">
+            <label class="form-label"><i class="bi bi-sun me-1"></i>Lunch</label>
+            <input type="text" class="form-control" [(ngModel)]="currentPlan.lunch" placeholder="What's for lunch?">
+          </div>
+          <div class="mb-3">
+            <label class="form-label"><i class="bi bi-moon-stars me-1"></i>Dinner</label>
+            <input type="text" class="form-control" [(ngModel)]="currentPlan.dinner" placeholder="What's for dinner?">
+          </div>
+          <div class="mb-3">
+            <label class="form-label"><i class="bi bi-cookie me-1"></i>Snacks</label>
+            <input type="text" class="form-control" [(ngModel)]="currentPlan.snacks" placeholder="Any snacks?">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline-secondary" (click)="showModal = false">Cancel</button>
+          <button class="btn btn-success" (click)="save()" [disabled]="!currentPlan.dayOfWeek">
+            <i class="bi bi-check-lg me-1"></i>{{ isEditing ? 'Update' : 'Save' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
